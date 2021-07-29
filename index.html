@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube</title>
+    <style>
+       #main_heading{
+           color: red;
+           text-align: center;
+       }
+       #query{
+           height: 40px;
+           width: 700px;
+           margin-left: 20%;
+       }
+       #btn{
+        height: 45px;
+        width: 7%;
+       }
+        .bhaskar{
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="main_heading">YouTube</h1>
+    <input id="query" type="text">
+    <button id="btn" onclick="findVideos()">Search</button>
+    <div id="videos"></div>
+</body>
+</html>
+<script>
+    let videos_div = document.getElementById("videos");
+    videos_div.className="bhaskar"
+    async function findVideos(){
+        
+        videos_div.innerHTML=null;
+        let q = document.getElementById("query").value
+      
+            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${q}&key=AIzaSyBHrTxBlZXbK_bUv_Lhv4jxg7DKHQLi-lo&maxResults=20`);
+            let data = await res.json();
+        
+           
+           let {items} =  data;
+           items = items.filter((el)=>{return el.id.videoId!=undefined})
+           items.forEach(({id:{videoId}}) => {
+            //    console.log(videoId)
+
+            let div = document.createElement("div");
+            div.className="balram"
+            div.innerHTML = `<iframe width="300" height="150" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+            videos_div.appendChild(div)
+
+
+           });
+    }
+
+
+</script>
+
